@@ -1,0 +1,1121 @@
+  [1m[35m (3.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (6.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20201015210010)
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (15.2ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "age" integer, "email" varchar, "profile_image" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201015210010"]]
+  [1m[35m (8.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateClubs (20201015210827)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE TABLE "clubs" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "meeting_time" varchar, "description" text, "image" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201015210827"]]
+  [1m[35m (41.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateMovies (20201015211150)
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE TABLE "movies" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "year" integer, "director" varchar, "image" varchar, "description" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mprimary::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201015211150"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateReviews (20201015211503)
+  [1m[35m (5.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "reviews" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar, "rating" integer, "movie_id" integer NOT NULL, "club_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_6ad75a4852"
+FOREIGN KEY ("movie_id")
+  REFERENCES "movies" ("id")
+, CONSTRAINT "fk_rails_a5e432ed7a"
+FOREIGN KEY ("club_id")
+  REFERENCES "clubs" ("id")
+)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE  INDEX "index_reviews_on_movie_id" ON "reviews" ("movie_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE  INDEX "index_reviews_on_club_id" ON "reviews" ("club_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201015211503"]]
+  [1m[35m (4.6ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateMessages (20201015212158)
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE TABLE "messages" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar, "club_id" integer NOT NULL, "user_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_2de89129c5"
+FOREIGN KEY ("club_id")
+  REFERENCES "clubs" ("id")
+, CONSTRAINT "fk_rails_273a25a7a6"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE  INDEX "index_messages_on_club_id" ON "messages" ("club_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE  INDEX "index_messages_on_user_id" ON "messages" ("user_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201015212158"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateMembers (20201016130541)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (8.6ms)[0m  [1m[35mCREATE TABLE "members" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "club_id" integer NOT NULL, "user_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_34b6511a43"
+FOREIGN KEY ("club_id")
+  REFERENCES "clubs" ("id")
+, CONSTRAINT "fk_rails_2e88fb7ce9"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE  INDEX "index_members_on_club_id" ON "members" ("club_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE  INDEX "index_members_on_user_id" ON "members" ("user_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20201016130541"]]
+  [1m[35m (5.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.8ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2020-10-16 16:05:03.075426"], ["updated_at", "2020-10-16 16:05:03.075426"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (3.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.7ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[36mMember Load (0.7ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[36mMovie Load (1.1ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  [1m[36mReview Load (2.7ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews"[0m
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.8ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[36mMember Load (0.6ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[36mMovie Load (2.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  [1m[36mReview Load (0.7ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews"[0m
+  [1m[35m (2.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.8ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[36mMember Load (0.7ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[36mMovie Load (0.6ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  [1m[36mReview Load (0.7ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews"[0m
+  [1m[36mMessage Load (0.6ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (1.6ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Ron Gutmann"], ["age", 8], ["email", "teodoro@mohr.info"], ["profile_image", "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"], ["created_at", "2020-10-16 16:10:10.668431"], ["updated_at", "2020-10-16 16:10:10.668431"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.9ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Rosio Purdy DDS"], ["age", 4], ["email", "rubye@rau-rice.info"], ["profile_image", "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg"], ["created_at", "2020-10-16 16:10:10.682842"], ["updated_at", "2020-10-16 16:10:10.682842"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (2.4ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Clark King"], ["age", 9], ["email", "adela@huels-lesch.net"], ["profile_image", "https://perfectczechwomen.com/wp-content/uploads/2019/04/New-Profile-20-500x536.jpg"], ["created_at", "2020-10-16 16:10:10.694413"], ["updated_at", "2020-10-16 16:10:10.694413"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.8ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Sharon Murray"], ["age", 41], ["email", "freeman@hintz-kuvalis.biz"], ["profile_image", "https://i.insider.com/59b6b9b6f7f1f622008b47e9?width=600&format=jpeg&auto=webp"], ["created_at", "2020-10-16 16:10:10.734027"], ["updated_at", "2020-10-16 16:10:10.734027"]]
+  [1m[35m (3.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Stephan Purdy"], ["age", 61], ["email", "ken_mann@smitham-murphy.name"], ["profile_image", "https://lh3.googleusercontent.com/proxy/7Lk6xvrPTfVFM8Kb9rysxtrKgFuRW_7sR8MCdVobiQjhTA61rtK5GRT8jAxCKtRp1vjBJSRE62feLrnJWwRYuy4Bu4vD5gCCBbhAshrTMNhDVD-3_IONP3LXbmBv_cMoHCteG4s"], ["created_at", "2020-10-16 16:10:10.791936"], ["updated_at", "2020-10-16 16:10:10.791936"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.9ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Raelene Koch"], ["age", 58], ["email", "francesco@cole-lesch.org"], ["profile_image", "https://www4.pictures.zimbio.com/gi/39th+Annual+People+Choice+Awards+Portraits+lza8vaU_QsZx.jpg"], ["created_at", "2020-10-16 16:10:10.806824"], ["updated_at", "2020-10-16 16:10:10.806824"]]
+  [1m[35m (3.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.7ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Gov. Preston Howell"], ["age", 25], ["email", "timika.leannon@auer-powlowski.name"], ["profile_image", "https://img-cdn.tid.al/o/6dc39fec4427c4f9f759c1f2c44137bec7366e4c.png"], ["created_at", "2020-10-16 16:10:10.907554"], ["updated_at", "2020-10-16 16:10:10.907554"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.8ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Felecia Swaniawski Ret."], ["age", 77], ["email", "carline.kertzmann@denesik.net"], ["profile_image", "https://lh3.googleusercontent.com/proxy/pAeLbKbOFAutI1n4wWr6yOhTZY_TPl3S6N3QaGfiDFRaP9GIDvWcNdFa_HlDkvh4DKZd7RWWz8oaWnrG-suZzlYL8bGKG5PWUnpLJIapJfZ8v8GslbBxzohfI9bryvu5M-w"], ["created_at", "2020-10-16 16:10:11.003527"], ["updated_at", "2020-10-16 16:10:11.003527"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.8ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Gov. Larry Macejkovic"], ["age", 74], ["email", "kelvin@kovacek-mclaughlin.co"], ["profile_image", "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png"], ["created_at", "2020-10-16 16:10:11.016821"], ["updated_at", "2020-10-16 16:10:11.016821"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (7.7ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Shanice Brekke"], ["age", 78], ["email", "nydia@dubuque-kuhlman.name"], ["profile_image", "https://www.bigredcloud.com/wp-content/uploads/4-tips-for-taking-professional-profile-pictures.jpg"], ["created_at", "2020-10-16 16:10:11.045995"], ["updated_at", "2020-10-16 16:10:11.045995"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.9ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Horror Club"], ["meeting_time", "October 22, 2020"], ["description", "[\"Porro dolorum distinctio. Non porro tempora. Asperiores qui amet.\"]"], ["image", "https://images.squarespace-cdn.com/content/5aa2aa305417fc8e6adca1a1/1528215995115-G4FGVUU3EFBJ62JVV6IK/IMG_3023+%282%29.jpg?format=1500w&content-type=image%2Fjpeg"], ["created_at", "2020-10-16 16:10:11.200397"], ["updated_at", "2020-10-16 16:10:11.200397"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (1.7ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (7.8ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Christopher Nolan Club"], ["meeting_time", "December 25, 2020"], ["description", "[\"Nostrum provident laudantium. Et voluptas eveniet. Quaerat ut culpa.\"]"], ["image", "https://upload.wikimedia.org/wikipedia/commons/9/95/Christopher_Nolan_Cannes_2018.jpg"], ["created_at", "2020-10-16 16:10:11.302421"], ["updated_at", "2020-10-16 16:10:11.302421"]]
+  [1m[35m (2.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (1.3ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Brad Pitt Club"], ["meeting_time", "October 31, 2020"], ["description", "[\"Quae temporibus ab. Sit voluptatum quo. Laudantium quis ut.\"]"], ["image", "https://www.biography.com/.image/c_fit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_620/MTY3MDUxMjI0MjM4MDA3OTgx/brad-pitt-attends-the-premiere-of-20th-century-foxs.jpg"], ["created_at", "2020-10-16 16:10:11.397570"], ["updated_at", "2020-10-16 16:10:11.397570"]]
+  [1m[35m (5.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.9ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Action Club"], ["meeting_time", "November 1, 2020"], ["description", "[\"Magni omnis ea. Dicta quia exercitationem. Et rem quasi.\"]"], ["image", "https://cdn10.bigcommerce.com/s-pn1ttq/products/1793/images/3451/Utlimate_Action_Movie_Club_sm__89445.1512077306.380.380.jpg?c=2"], ["created_at", "2020-10-16 16:10:11.433341"], ["updated_at", "2020-10-16 16:10:11.433341"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (1.2ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Marvel Movies Club "], ["meeting_time", "December 11, 2020"], ["description", "[\"Cum ut molestiae. Commodi consequuntur distinctio. Et sunt atque.\"]"], ["image", "https://www.slashfilm.com/wp/wp-content/images/marvel-intro-e1556625768997.jpg"], ["created_at", "2020-10-16 16:10:11.448979"], ["updated_at", "2020-10-16 16:10:11.448979"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.3ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 1], ["user_id", 1], ["created_at", "2020-10-16 16:10:11.734350"], ["updated_at", "2020-10-16 16:10:11.734350"]]
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (9.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 2], ["user_id", 1], ["created_at", "2020-10-16 16:10:11.805367"], ["updated_at", "2020-10-16 16:10:11.805367"]]
+  [1m[35m (8.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (2.9ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 3], ["user_id", 2], ["created_at", "2020-10-16 16:10:11.839115"], ["updated_at", "2020-10-16 16:10:11.839115"]]
+  [1m[35m (4.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.3ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 4], ["user_id", 2], ["created_at", "2020-10-16 16:10:12.106264"], ["updated_at", "2020-10-16 16:10:12.106264"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 5], ["user_id", 3], ["created_at", "2020-10-16 16:10:12.143119"], ["updated_at", "2020-10-16 16:10:12.143119"]]
+  [1m[35m (6.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.3ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 1], ["user_id", 3], ["created_at", "2020-10-16 16:10:12.238032"], ["updated_at", "2020-10-16 16:10:12.238032"]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (4.4ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 5], ["user_id", 4], ["created_at", "2020-10-16 16:10:12.259317"], ["updated_at", "2020-10-16 16:10:12.259317"]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 4], ["user_id", 5], ["created_at", "2020-10-16 16:10:12.320201"], ["updated_at", "2020-10-16 16:10:12.320201"]]
+  [1m[35m (5.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 4], ["user_id", 6], ["created_at", "2020-10-16 16:10:12.338711"], ["updated_at", "2020-10-16 16:10:12.338711"]]
+  [1m[35m (2.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.6ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 1], ["user_id", 7], ["created_at", "2020-10-16 16:10:12.365166"], ["updated_at", "2020-10-16 16:10:12.365166"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 2], ["user_id", 8], ["created_at", "2020-10-16 16:10:12.379473"], ["updated_at", "2020-10-16 16:10:12.379473"]]
+  [1m[35m (19.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.0ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 5], ["user_id", 9], ["created_at", "2020-10-16 16:10:12.566626"], ["updated_at", "2020-10-16 16:10:12.566626"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (4.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 1], ["user_id", 9], ["created_at", "2020-10-16 16:10:12.584040"], ["updated_at", "2020-10-16 16:10:12.584040"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.4ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 2], ["user_id", 10], ["created_at", "2020-10-16 16:10:12.604801"], ["updated_at", "2020-10-16 16:10:12.604801"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (13.3ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 3], ["user_id", 10], ["created_at", "2020-10-16 16:10:12.611639"], ["updated_at", "2020-10-16 16:10:12.611639"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 2], ["user_id", 10], ["created_at", "2020-10-16 16:10:12.648873"], ["updated_at", "2020-10-16 16:10:12.648873"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.9ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Midsommar"], ["year", 2019], ["director", "Ari Aster"], ["image", "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/Midsommar_%282019_film_poster%29.png/220px-Midsommar_%282019_film_poster%29.png"], ["description", "A couple travel to Sweden to visit their friend's rural hometown for its fabled midsummer festival, but what begins as an idyllic retreat quickly devolves into an increasingly violent and bizarre competition at the hands of a pagan cult."], ["created_at", "2020-10-16 16:10:12.708728"], ["updated_at", "2020-10-16 16:10:12.708728"]]
+  [1m[35m (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "It"], ["year", 2017], ["director", "Andrés Muschietti"], ["image", "https://i.pinimg.com/originals/4e/8e/b7/4e8eb7ff2b0062083df9828a726dafe6.jpg"], ["description", "Seven young outcasts in Derry, Maine, are about to face their worst nightmare -- an ancient, shape-shifting evil that emerges from the sewer every 27 years to prey on the town's children. Banding together over the course of one horrifying summer, the friends must overcome their own personal fears to battle the murderous, bloodthirsty clown known as Pennywise."], ["created_at", "2020-10-16 16:10:12.736225"], ["updated_at", "2020-10-16 16:10:12.736225"]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Us"], ["year", 2019], ["director", "Jordan Peele"], ["image", "https://m.media-amazon.com/images/M/MV5BODUyODM0NjYyNF5BMl5BanBnXkFtZTgwNjAwMDU5NjM@._V1_SY1000_SX640_AL_.jpg"], ["description", "Accompanied by her husband, son and daughter, Adelaide Wilson returns to the beachfront home where she grew up as a child. Haunted by a traumatic experience from the past, Adelaide grows increasingly concerned that something bad is going to happen. Her worst fears soon become a reality when four masked strangers descend upon the house, forcing the Wilsons into a fight for survival. When the masks come off, the family is horrified to learn that each attacker takes the appearance of one of them."], ["created_at", "2020-10-16 16:10:12.767998"], ["updated_at", "2020-10-16 16:10:12.767998"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Inception"], ["year", 2010], ["director", "Christopher Nolan"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg"], ["description", "Dom Cobb (Leonardo DiCaprio) is a thief with the rare ability to enter people's dreams and steal their secrets from their subconscious. His skill has made him a hot commodity in the world of corporate espionage but has also cost him everything he loves. Cobb gets a chance at redemption when he is offered a seemingly impossible task: Plant an idea in someone's mind. If he succeeds, it will be the perfect crime, but a dangerous enemy anticipates Cobb's every move."], ["created_at", "2020-10-16 16:10:12.779402"], ["updated_at", "2020-10-16 16:10:12.779402"]]
+  [1m[35m (3.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.4ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Dark Knight"], ["year", 2008], ["director", "Christopher Nolan"], ["image", "https://akm-img-a-in.tosshub.com/sites/dailyo/story/embed/201807/tdk_071818043506.jpg"], ["description", "With the help of allies Lt. Jim Gordon (Gary Oldman) and DA Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been able to keep a tight lid on crime in Gotham City. But when a vile young criminal calling himself the Joker (Heath Ledger) suddenly throws the town into chaos, the caped Crusader begins to tread a fine line between heroism and vigilantism."], ["created_at", "2020-10-16 16:10:12.803159"], ["updated_at", "2020-10-16 16:10:12.803159"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (2.0ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Interstellar"], ["year", 2014], ["director", "Christopher Nolan"], ["image", "https://images-na.ssl-images-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg"], ["description", "In Earth's future, a global crop blight and second Dust Bowl are slowly rendering the planet uninhabitable. Professor Brand (Michael Caine), a brilliant NASA physicist, is working on plans to save mankind by transporting Earth's population to a new home via a wormhole. But first, Brand must send former NASA pilot Cooper (Matthew McConaughey) and a team of researchers through the wormhole and across the galaxy to find out which of three planets could be mankind's new home."], ["created_at", "2020-10-16 16:10:12.809701"], ["updated_at", "2020-10-16 16:10:12.809701"]]
+  [1m[35m (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (9.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Fight Club"], ["year", 1999], ["director", "David Fincher"], ["image", "https://akns-images.eonline.com/eol_images/Entire_Site/2019914/rs_685x1024-191014113838-634-fight-club-poster.cl.101419.jpg?fit=around|685:auto&output-quality=90&crop=685:auto;center,top"], ["description", "A depressed man (Edward Norton) suffering from insomnia meets a strange soap salesman named Tyler Durden (Brad Pitt) and soon finds himself living in his squalid house after his perfect apartment is destroyed. The two bored men form an underground club with strict rules and fight other men who are fed up with their mundane lives. Their perfect partnership frays when Marla (Helena Bonham Carter), a fellow support group crasher, attracts Tyler's attention."], ["created_at", "2020-10-16 16:10:12.915893"], ["updated_at", "2020-10-16 16:10:12.915893"]]
+  [1m[35m (5.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Money Ball"], ["year", 2011], ["director", "Bennett Miller"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxOTU3Mzc1M15BMl5BanBnXkFtZTcwMzk1ODUzNg@@._V1_.jpg"], ["description", "Billy Beane (Brad Pitt), general manager of the Oakland A's, one day has an epiphany: Baseball's conventional wisdom is all wrong. Faced with a tight budget, Beane must reinvent his team by outsmarting the richer ball clubs. Joining forces with Ivy League graduate Peter Brand (Jonah Hill), Beane prepares to challenge old-school traditions. He recruits bargain-bin players whom the scouts have labeled as flawed, but have game-winning potential. Based on the book by Michael Lewis."], ["created_at", "2020-10-16 16:10:13.008500"], ["updated_at", "2020-10-16 16:10:13.008500"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (6.2ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Troy"], ["year", 2004], ["director", "Wolfgang Peterson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQf9CM5qT6EXTQY5YF87IKI_GBu0FVCe3IucLJvJJmGhsu7Ux33"], ["description", "Based on Homer's Iliad, this epic portrays the battle between the ancient kingdoms of Troy and Sparta. While visiting Spartan King Menelaus (Brendan Gleeson), Trojan prince Paris (Orlando Bloom) falls for Menelaus' wife, Helen (Diane Kruger), and takes her back to Troy. Menelaus' brother, King Agamemnon (Brian Cox), having already defeated every army in Greece, uses his brother's fury as a pretext to declare war against Troy, the last kingdom preventing his control over the Aegean Sea."], ["created_at", "2020-10-16 16:10:13.144348"], ["updated_at", "2020-10-16 16:10:13.144348"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (51.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Mad Max: Fury Road"], ["year", 2015], ["director", "George Miller"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn1OTYGz2GDC1XjA9tirh_1Rd571yE5UFIYsmZp4nACMd7CCHM"], ["description", "Years after the collapse of civilization, the tyrannical Immortan Joe enslaves apocalypse survivors inside the desert fortress the Citadel. When the warrior Imperator Furiosa (Charlize Theron) leads the despot's five wives in a daring escape, she forges an alliance with Max Rockatansky (Tom Hardy), a loner and former captive. Fortified in the massive, armored truck the War Rig, they try to outrun the ruthless warlord and his henchmen in a deadly high-speed chase through the Wasteland."], ["created_at", "2020-10-16 16:10:13.166957"], ["updated_at", "2020-10-16 16:10:13.166957"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.0ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Kingsman: The Secret Service"], ["year", 2014], ["director", "Matthew Vaughn"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaV_8e8HbPXUxNbEO7VxuJMF6g8K9KpZYUFbNkAllh8NMAcbL0"], ["description", "Gary Eggsy Unwin (Taron Egerton), whose late father secretly worked for a spy organization, lives in a South London housing estate and seems headed for a life behind bars. However, dapper agent Harry Hart (Colin Firth) recognizes potential in the youth and recruits him to be a trainee in the secret service. Meanwhile, villainous Richmond Valentine (Samuel L. Jackson) launches a diabolical plan to solve the problem of climate change via a worldwide killing spree."], ["created_at", "2020-10-16 16:10:13.257045"], ["updated_at", "2020-10-16 16:10:13.257045"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (6.1ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "John Wick"], ["year", 2014], ["director", "Chad Stahelski"], ["image", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8VG9sviAteOyJC-CULm4U-WFIiGn8QrDSXDBiF7E-amB99kFX"], ["description", "An ex-hit-man comes out of retirement to track down the gangsters that killed his dog and took everything from him."], ["created_at", "2020-10-16 16:10:13.269742"], ["updated_at", "2020-10-16 16:10:13.269742"]]
+  [1m[35m (3.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Avengers"], ["year", 2012], ["director", "Joss Whedon"], ["image", "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"], ["description", "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."], ["created_at", "2020-10-16 16:10:13.441958"], ["updated_at", "2020-10-16 16:10:13.441958"]]
+  [1m[35m (7.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.1ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Doctor Strange"], ["year", 2016], ["director", "Scott Derrickson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSY36FiQD0jYGpEeLmi4rJrUjX2OwXVqB6Nktco3M_KvdIQpARF"], ["description", "Dr. Stephen Strange's (Benedict Cumberbatch) life changes after a car accident robs him of the use of his hands. When traditional medicine fails him, he looks for healing, and hope, in a mysterious enclave. He quickly learns that the enclave is at the front line of a battle against unseen dark forces bent on destroying reality. Before long, Strange is forced to choose between his life of fortune and status or leave it all behind to defend the world as the most powerful sorcerer in existence."], ["created_at", "2020-10-16 16:10:13.466306"], ["updated_at", "2020-10-16 16:10:13.466306"]]
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Black Panther"], ["year", 2016], ["director", "Ryan Coogler"], ["image", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRKSycOdlnIhxqT7O_n7nbBFpDV__d1IGzEB6QGG-O7zOVj57y1"], ["description", "After the death of his father, T'Challa returns home to the African nation of Wakanda to take his rightful place as king. When a powerful enemy suddenly reappears, T'Challa's mettle as king -- and as Black Panther -- gets tested when he's drawn into a conflict that puts the fate of Wakanda and the entire world at risk. Faced with treachery and danger, the young king must rally his allies and release the full power of Black Panther to defeat his foes and secure the safety of his people."], ["created_at", "2020-10-16 16:10:13.481631"], ["updated_at", "2020-10-16 16:10:13.481631"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Placeat praesentium sint. Omnis adipisci veniam. Et ratione molestiae.\"]"], ["rating", 6], ["movie_id", 3], ["club_id", 1], ["created_at", "2020-10-16 16:10:13.672064"], ["updated_at", "2020-10-16 16:10:13.672064"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.9ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Numquam aspernatur quia. Minus corrupti velit. Nihil sed quaerat.\"]"], ["rating", 9], ["movie_id", 1], ["club_id", 1], ["created_at", "2020-10-16 16:10:13.691910"], ["updated_at", "2020-10-16 16:10:13.691910"]]
+  [1m[35m (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.9ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Sint ut accusamus. Doloremque ad et. Consequatur eum et.\"]"], ["rating", 3], ["movie_id", 2], ["club_id", 1], ["created_at", "2020-10-16 16:10:13.717521"], ["updated_at", "2020-10-16 16:10:13.717521"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Officiis repellendus suscipit. Ipsa quo aliquid. Aspernatur qui minus.\"]"], ["rating", 6], ["movie_id", 5], ["club_id", 2], ["created_at", "2020-10-16 16:10:13.743702"], ["updated_at", "2020-10-16 16:10:13.743702"]]
+  [1m[35m (5.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Sed praesentium voluptate. Excepturi similique sed. Quisquam occaecati illum.\"]"], ["rating", 8], ["movie_id", 4], ["club_id", 2], ["created_at", "2020-10-16 16:10:13.770828"], ["updated_at", "2020-10-16 16:10:13.770828"]]
+  [1m[35m (4.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (2.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Omnis temporibus est. Cupiditate blanditiis pariatur. Quas quod officiis.\"]"], ["rating", 3], ["movie_id", 6], ["club_id", 2], ["created_at", "2020-10-16 16:10:13.984632"], ["updated_at", "2020-10-16 16:10:13.984632"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.0ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Tempora enim nihil. Fugiat dignissimos vero. Enim et reprehenderit.\"]"], ["rating", 1], ["movie_id", 7], ["club_id", 3], ["created_at", "2020-10-16 16:10:14.023615"], ["updated_at", "2020-10-16 16:10:14.023615"]]
+  [1m[35m (5.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (6.2ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Eveniet nam molestias. Quaerat nostrum sint. Mollitia dolorem quaerat.\"]"], ["rating", 9], ["movie_id", 8], ["club_id", 3], ["created_at", "2020-10-16 16:10:14.103240"], ["updated_at", "2020-10-16 16:10:14.103240"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Omnis hic ipsum. Fugit quo corrupti. Eum voluptatem est.\"]"], ["rating", 10], ["movie_id", 9], ["club_id", 3], ["created_at", "2020-10-16 16:10:14.139342"], ["updated_at", "2020-10-16 16:10:14.139342"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Necessitatibus labore doloribus. Et suscipit adipisci. Reprehenderit ut placeat.\"]"], ["rating", 5], ["movie_id", 10], ["club_id", 4], ["created_at", "2020-10-16 16:10:14.344854"], ["updated_at", "2020-10-16 16:10:14.344854"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (2.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Ut impedit et. Consequatur ratione ut. Rerum et ratione.\"]"], ["rating", 10], ["movie_id", 11], ["club_id", 4], ["created_at", "2020-10-16 16:10:14.374198"], ["updated_at", "2020-10-16 16:10:14.374198"]]
+  [1m[35m (3.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (2.8ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Temporibus libero et. Perspiciatis quibusdam tempora. Itaque porro voluptatum.\"]"], ["rating", 7], ["movie_id", 12], ["club_id", 4], ["created_at", "2020-10-16 16:10:14.394090"], ["updated_at", "2020-10-16 16:10:14.394090"]]
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.2ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Vero dolor asperiores. Sunt ipsum labore. Tempora id incidunt.\"]"], ["rating", 9], ["movie_id", 13], ["club_id", 5], ["created_at", "2020-10-16 16:10:14.417581"], ["updated_at", "2020-10-16 16:10:14.417581"]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.9ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Quos recusandae inventore. Autem repudiandae molestiae. Sed maiores in.\"]"], ["rating", 6], ["movie_id", 14], ["club_id", 5], ["created_at", "2020-10-16 16:10:14.484728"], ["updated_at", "2020-10-16 16:10:14.484728"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.0ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Aut sit est. Beatae doloribus totam. Maxime aut repellat.\"]"], ["rating", 6], ["movie_id", 15], ["club_id", 5], ["created_at", "2020-10-16 16:10:14.539954"], ["updated_at", "2020-10-16 16:10:14.539954"]]
+  [1m[35m (37.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Destroy (2.6ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.8ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 1]]
+  [1m[36mMember Destroy (3.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 1]]
+  [1m[36mMember Destroy (0.1ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 2]]
+  [1m[36mClub Load (0.2ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 1]]
+  [1m[36mMessage Load (0.4ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 1]]
+  [1m[36mUser Destroy (0.7ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 1]]
+  [1m[35m (3.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 2]]
+  [1m[36mMember Destroy (0.9ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 3]]
+  [1m[36mMember Destroy (0.1ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 4]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 2]]
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 2]]
+  [1m[36mUser Destroy (0.1ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 2]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 3]]
+  [1m[36mMember Destroy (0.5ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 5]]
+  [1m[36mMember Destroy (0.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 6]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 3]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 3]]
+  [1m[36mUser Destroy (0.6ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 3]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 4]]
+  [1m[36mMember Destroy (0.4ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 7]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 4]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 4]]
+  [1m[36mUser Destroy (0.4ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 4]]
+  [1m[35m (2.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 5]]
+  [1m[36mMember Destroy (0.4ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 8]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 5]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 5]]
+  [1m[36mUser Destroy (0.5ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 5]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 6]]
+  [1m[36mMember Destroy (0.4ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 9]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 6]]
+  [1m[36mMessage Load (0.5ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 6]]
+  [1m[36mUser Destroy (0.2ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 6]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 7]]
+  [1m[36mMember Destroy (0.7ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 10]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 7]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 7]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 7]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.7ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 8]]
+  [1m[36mMember Destroy (8.8ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 11]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 8]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 8]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 8]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 9]]
+  [1m[36mMember Destroy (0.8ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 12]]
+  [1m[36mMember Destroy (1.0ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 13]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 9]]
+  [1m[36mMessage Load (0.3ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 9]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 9]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 10]]
+  [1m[36mMember Destroy (0.8ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 14]]
+  [1m[36mMember Destroy (0.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 15]]
+  [1m[36mMember Destroy (3.3ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 16]]
+  [1m[36mClub Load (0.1ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" INNER JOIN "members" ON "clubs"."id" = "members"."club_id" WHERE "members"."user_id" = ?[0m  [["user_id", 10]]
+  [1m[36mMessage Load (13.6ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 10]]
+  [1m[36mUser Destroy (0.4ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 10]]
+  [1m[35m (2.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mClub Load (0.8ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Destroy (2.0ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 1]]
+  [1m[35m (1.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.7ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Destroy (1.6ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.6ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.6ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (1.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 1]]
+  [1m[36mReview Destroy (1.5ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 1]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 2]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 3]]
+  [1m[36mMessage Load (0.5ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 1]]
+  [1m[36mMember Load (0.5ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 1]]
+  [1m[36mClub Destroy (0.5ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 1]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 2]]
+  [1m[36mReview Destroy (0.5ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 4]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 5]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 6]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 2]]
+  [1m[36mMember Load (0.6ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 2]]
+  [1m[36mClub Destroy (0.6ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 2]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (1.4ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 3]]
+  [1m[36mReview Destroy (0.9ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 7]]
+  [1m[36mReview Destroy (0.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 8]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 9]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 3]]
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 3]]
+  [1m[36mClub Destroy (3.1ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 3]]
+  [1m[35m (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 4]]
+  [1m[36mReview Destroy (0.9ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 10]]
+  [1m[36mReview Destroy (0.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 11]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 12]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 4]]
+  [1m[36mMember Load (0.5ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 4]]
+  [1m[36mClub Destroy (0.4ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 4]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.4ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 5]]
+  [1m[36mReview Destroy (1.0ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 13]]
+  [1m[36mReview Destroy (9.8ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 14]]
+  [1m[36mReview Destroy (2.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 15]]
+  [1m[36mMessage Load (4.8ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 5]]
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 5]]
+  [1m[36mClub Destroy (0.3ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 5]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mMember Load (0.6ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mClub Load (0.7ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[36mMember Load (0.6ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[36mMovie Load (1.6ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (2.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 1]]
+  [1m[36mMovie Destroy (0.7ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 1]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 2]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 2]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 3]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 3]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 4]]
+  [1m[36mMovie Destroy (1.1ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 4]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 5]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 5]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (9.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 6]]
+  [1m[36mMovie Destroy (2.8ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 6]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 7]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 7]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.4ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 8]]
+  [1m[36mMovie Destroy (0.7ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 8]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 9]]
+  [1m[36mMovie Destroy (0.5ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 9]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 10]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 10]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 11]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 11]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 12]]
+  [1m[36mMovie Destroy (0.5ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 12]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 13]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 13]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 14]]
+  [1m[36mMovie Destroy (0.7ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 14]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 15]]
+  [1m[36mMovie Destroy (0.5ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 15]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mReview Load (0.5ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews"[0m
+  [1m[36mMessage Load (3.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (1.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Dr. Seth Kessler"], ["age", 73], ["email", "leona@reichert-krajcik.co"], ["profile_image", "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"], ["created_at", "2020-10-16 16:38:55.964450"], ["updated_at", "2020-10-16 16:38:55.964450"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Darryl Dibbert"], ["age", 2], ["email", "cordie@okeefe.co"], ["profile_image", "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg"], ["created_at", "2020-10-16 16:38:55.973690"], ["updated_at", "2020-10-16 16:38:55.973690"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.6ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Ira McCullough DDS"], ["age", 55], ["email", "milagro@funk-feest.io"], ["profile_image", "https://perfectczechwomen.com/wp-content/uploads/2019/04/New-Profile-20-500x536.jpg"], ["created_at", "2020-10-16 16:38:55.997330"], ["updated_at", "2020-10-16 16:38:55.997330"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.9ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Phillip Metz"], ["age", 95], ["email", "meg.haley@legros-oberbrunner.com"], ["profile_image", "https://i.insider.com/59b6b9b6f7f1f622008b47e9?width=600&format=jpeg&auto=webp"], ["created_at", "2020-10-16 16:38:56.006608"], ["updated_at", "2020-10-16 16:38:56.006608"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Sen. Winona Crona"], ["age", 28], ["email", "hayden_moore@wunsch.info"], ["profile_image", "https://lh3.googleusercontent.com/proxy/7Lk6xvrPTfVFM8Kb9rysxtrKgFuRW_7sR8MCdVobiQjhTA61rtK5GRT8jAxCKtRp1vjBJSRE62feLrnJWwRYuy4Bu4vD5gCCBbhAshrTMNhDVD-3_IONP3LXbmBv_cMoHCteG4s"], ["created_at", "2020-10-16 16:38:56.014350"], ["updated_at", "2020-10-16 16:38:56.014350"]]
+  [1m[35m (5.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.7ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Steve Daugherty"], ["age", 17], ["email", "tamar@nader-kautzer.info"], ["profile_image", "https://www4.pictures.zimbio.com/gi/39th+Annual+People+Choice+Awards+Portraits+lza8vaU_QsZx.jpg"], ["created_at", "2020-10-16 16:38:56.030096"], ["updated_at", "2020-10-16 16:38:56.030096"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.6ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Wesley Morar"], ["age", 99], ["email", "young.mclaughlin@oreilly-prohaska.name"], ["profile_image", "https://img-cdn.tid.al/o/6dc39fec4427c4f9f759c1f2c44137bec7366e4c.png"], ["created_at", "2020-10-16 16:38:56.039788"], ["updated_at", "2020-10-16 16:38:56.039788"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (1.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Mr. Celesta Jakubowski"], ["age", 74], ["email", "quentin@boyer.net"], ["profile_image", "https://lh3.googleusercontent.com/proxy/pAeLbKbOFAutI1n4wWr6yOhTZY_TPl3S6N3QaGfiDFRaP9GIDvWcNdFa_HlDkvh4DKZd7RWWz8oaWnrG-suZzlYL8bGKG5PWUnpLJIapJfZ8v8GslbBxzohfI9bryvu5M-w"], ["created_at", "2020-10-16 16:38:56.047114"], ["updated_at", "2020-10-16 16:38:56.047114"]]
+  [1m[35m (3.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.8ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Evelynn Herman"], ["age", 17], ["email", "loriann.lueilwitz@herman.io"], ["profile_image", "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png"], ["created_at", "2020-10-16 16:38:56.058997"], ["updated_at", "2020-10-16 16:38:56.058997"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Ming O'Hara"], ["age", 75], ["email", "eldon_wilkinson@treutel.org"], ["profile_image", "https://www.bigredcloud.com/wp-content/uploads/4-tips-for-taking-professional-profile-pictures.jpg"], ["created_at", "2020-10-16 16:38:56.068118"], ["updated_at", "2020-10-16 16:38:56.068118"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.8ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Horror Club"], ["meeting_time", "October 22, 2020"], ["description", "[\"Sed sapiente et. Omnis ut odio. Autem cupiditate aut.\"]"], ["image", "https://images.squarespace-cdn.com/content/5aa2aa305417fc8e6adca1a1/1528215995115-G4FGVUU3EFBJ62JVV6IK/IMG_3023+%282%29.jpg?format=1500w&content-type=image%2Fjpeg"], ["created_at", "2020-10-16 16:38:56.089985"], ["updated_at", "2020-10-16 16:38:56.089985"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.7ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Christopher Nolan Club"], ["meeting_time", "December 25, 2020"], ["description", "[\"Impedit sunt aperiam. Dolorem ut ut. Odio et est.\"]"], ["image", "https://upload.wikimedia.org/wikipedia/commons/9/95/Christopher_Nolan_Cannes_2018.jpg"], ["created_at", "2020-10-16 16:38:56.099424"], ["updated_at", "2020-10-16 16:38:56.099424"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.5ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Brad Pitt Club"], ["meeting_time", "October 31, 2020"], ["description", "[\"Placeat asperiores dicta. Soluta dolorem sequi. Sit qui et.\"]"], ["image", "https://www.biography.com/.image/c_fit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_620/MTY3MDUxMjI0MjM4MDA3OTgx/brad-pitt-attends-the-premiere-of-20th-century-foxs.jpg"], ["created_at", "2020-10-16 16:38:56.108386"], ["updated_at", "2020-10-16 16:38:56.108386"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.5ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Action Club"], ["meeting_time", "November 1, 2020"], ["description", "[\"Repellat ipsa dolorem. Quibusdam laudantium eveniet. Adipisci est ducimus.\"]"], ["image", "https://cdn10.bigcommerce.com/s-pn1ttq/products/1793/images/3451/Utlimate_Action_Movie_Club_sm__89445.1512077306.380.380.jpg?c=2"], ["created_at", "2020-10-16 16:38:56.115267"], ["updated_at", "2020-10-16 16:38:56.115267"]]
+  [1m[35m (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.5ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Marvel Movies Club "], ["meeting_time", "December 11, 2020"], ["description", "[\"Aut pariatur id. Id est eius. Quo facere quo.\"]"], ["image", "https://www.slashfilm.com/wp/wp-content/images/marvel-intro-e1556625768997.jpg"], ["created_at", "2020-10-16 16:38:56.129786"], ["updated_at", "2020-10-16 16:38:56.129786"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.4ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 6], ["user_id", 11], ["created_at", "2020-10-16 16:38:56.152052"], ["updated_at", "2020-10-16 16:38:56.152052"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (2.6ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 7], ["user_id", 11], ["created_at", "2020-10-16 16:38:56.162993"], ["updated_at", "2020-10-16 16:38:56.162993"]]
+  [1m[35m (6.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 8], ["user_id", 12], ["created_at", "2020-10-16 16:38:56.178336"], ["updated_at", "2020-10-16 16:38:56.178336"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 9], ["user_id", 12], ["created_at", "2020-10-16 16:38:56.196202"], ["updated_at", "2020-10-16 16:38:56.196202"]]
+  [1m[35m (3.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 10], ["user_id", 13], ["created_at", "2020-10-16 16:38:56.206589"], ["updated_at", "2020-10-16 16:38:56.206589"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.6ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 6], ["user_id", 13], ["created_at", "2020-10-16 16:38:56.212566"], ["updated_at", "2020-10-16 16:38:56.212566"]]
+  [1m[35m (3.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 10], ["user_id", 14], ["created_at", "2020-10-16 16:38:56.231580"], ["updated_at", "2020-10-16 16:38:56.231580"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 9], ["user_id", 15], ["created_at", "2020-10-16 16:38:56.248799"], ["updated_at", "2020-10-16 16:38:56.248799"]]
+  [1m[35m (3.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.0ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 9], ["user_id", 16], ["created_at", "2020-10-16 16:38:56.261761"], ["updated_at", "2020-10-16 16:38:56.261761"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 6], ["user_id", 17], ["created_at", "2020-10-16 16:38:56.271079"], ["updated_at", "2020-10-16 16:38:56.271079"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 7], ["user_id", 18], ["created_at", "2020-10-16 16:38:56.277921"], ["updated_at", "2020-10-16 16:38:56.277921"]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.0ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 10], ["user_id", 19], ["created_at", "2020-10-16 16:38:56.288383"], ["updated_at", "2020-10-16 16:38:56.288383"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 6], ["user_id", 19], ["created_at", "2020-10-16 16:38:56.296263"], ["updated_at", "2020-10-16 16:38:56.296263"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 7], ["user_id", 20], ["created_at", "2020-10-16 16:38:56.306127"], ["updated_at", "2020-10-16 16:38:56.306127"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 8], ["user_id", 20], ["created_at", "2020-10-16 16:38:56.313240"], ["updated_at", "2020-10-16 16:38:56.313240"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.0ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 7], ["user_id", 20], ["created_at", "2020-10-16 16:38:56.327325"], ["updated_at", "2020-10-16 16:38:56.327325"]]
+  [1m[35m (5.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Midsommar"], ["year", 2019], ["director", "Ari Aster"], ["image", "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/Midsommar_%282019_film_poster%29.png/220px-Midsommar_%282019_film_poster%29.png"], ["description", "A couple travel to Sweden to visit their friend's rural hometown for its fabled midsummer festival, but what begins as an idyllic retreat quickly devolves into an increasingly violent and bizarre competition at the hands of a pagan cult."], ["created_at", "2020-10-16 16:38:56.348965"], ["updated_at", "2020-10-16 16:38:56.348965"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.1ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "It"], ["year", 2017], ["director", "Andrés Muschietti"], ["image", "https://i.pinimg.com/originals/4e/8e/b7/4e8eb7ff2b0062083df9828a726dafe6.jpg"], ["description", "Seven young outcasts in Derry, Maine, are about to face their worst nightmare -- an ancient, shape-shifting evil that emerges from the sewer every 27 years to prey on the town's children. Banding together over the course of one horrifying summer, the friends must overcome their own personal fears to battle the murderous, bloodthirsty clown known as Pennywise."], ["created_at", "2020-10-16 16:38:56.358436"], ["updated_at", "2020-10-16 16:38:56.358436"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.0ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Us"], ["year", 2019], ["director", "Jordan Peele"], ["image", "https://m.media-amazon.com/images/M/MV5BODUyODM0NjYyNF5BMl5BanBnXkFtZTgwNjAwMDU5NjM@._V1_SY1000_SX640_AL_.jpg"], ["description", "Accompanied by her husband, son and daughter, Adelaide Wilson returns to the beachfront home where she grew up as a child. Haunted by a traumatic experience from the past, Adelaide grows increasingly concerned that something bad is going to happen. Her worst fears soon become a reality when four masked strangers descend upon the house, forcing the Wilsons into a fight for survival. When the masks come off, the family is horrified to learn that each attacker takes the appearance of one of them."], ["created_at", "2020-10-16 16:38:56.368830"], ["updated_at", "2020-10-16 16:38:56.368830"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Inception"], ["year", 2010], ["director", "Christopher Nolan"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg"], ["description", "Dom Cobb (Leonardo DiCaprio) is a thief with the rare ability to enter people's dreams and steal their secrets from their subconscious. His skill has made him a hot commodity in the world of corporate espionage but has also cost him everything he loves. Cobb gets a chance at redemption when he is offered a seemingly impossible task: Plant an idea in someone's mind. If he succeeds, it will be the perfect crime, but a dangerous enemy anticipates Cobb's every move."], ["created_at", "2020-10-16 16:38:56.377916"], ["updated_at", "2020-10-16 16:38:56.377916"]]
+  [1m[35m (4.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Dark Knight"], ["year", 2008], ["director", "Christopher Nolan"], ["image", "https://akm-img-a-in.tosshub.com/sites/dailyo/story/embed/201807/tdk_071818043506.jpg"], ["description", "With the help of allies Lt. Jim Gordon (Gary Oldman) and DA Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been able to keep a tight lid on crime in Gotham City. But when a vile young criminal calling himself the Joker (Heath Ledger) suddenly throws the town into chaos, the caped Crusader begins to tread a fine line between heroism and vigilantism."], ["created_at", "2020-10-16 16:38:56.395523"], ["updated_at", "2020-10-16 16:38:56.395523"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Interstellar"], ["year", 2014], ["director", "Christopher Nolan"], ["image", "https://images-na.ssl-images-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg"], ["description", "In Earth's future, a global crop blight and second Dust Bowl are slowly rendering the planet uninhabitable. Professor Brand (Michael Caine), a brilliant NASA physicist, is working on plans to save mankind by transporting Earth's population to a new home via a wormhole. But first, Brand must send former NASA pilot Cooper (Matthew McConaughey) and a team of researchers through the wormhole and across the galaxy to find out which of three planets could be mankind's new home."], ["created_at", "2020-10-16 16:38:56.405620"], ["updated_at", "2020-10-16 16:38:56.405620"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Fight Club"], ["year", 1999], ["director", "David Fincher"], ["image", "https://akns-images.eonline.com/eol_images/Entire_Site/2019914/rs_685x1024-191014113838-634-fight-club-poster.cl.101419.jpg?fit=around|685:auto&output-quality=90&crop=685:auto;center,top"], ["description", "A depressed man (Edward Norton) suffering from insomnia meets a strange soap salesman named Tyler Durden (Brad Pitt) and soon finds himself living in his squalid house after his perfect apartment is destroyed. The two bored men form an underground club with strict rules and fight other men who are fed up with their mundane lives. Their perfect partnership frays when Marla (Helena Bonham Carter), a fellow support group crasher, attracts Tyler's attention."], ["created_at", "2020-10-16 16:38:56.411758"], ["updated_at", "2020-10-16 16:38:56.411758"]]
+  [1m[35m (8.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Money Ball"], ["year", 2011], ["director", "Bennett Miller"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxOTU3Mzc1M15BMl5BanBnXkFtZTcwMzk1ODUzNg@@._V1_.jpg"], ["description", "Billy Beane (Brad Pitt), general manager of the Oakland A's, one day has an epiphany: Baseball's conventional wisdom is all wrong. Faced with a tight budget, Beane must reinvent his team by outsmarting the richer ball clubs. Joining forces with Ivy League graduate Peter Brand (Jonah Hill), Beane prepares to challenge old-school traditions. He recruits bargain-bin players whom the scouts have labeled as flawed, but have game-winning potential. Based on the book by Michael Lewis."], ["created_at", "2020-10-16 16:38:56.430405"], ["updated_at", "2020-10-16 16:38:56.430405"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.9ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Troy"], ["year", 2004], ["director", "Wolfgang Peterson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQf9CM5qT6EXTQY5YF87IKI_GBu0FVCe3IucLJvJJmGhsu7Ux33"], ["description", "Based on Homer's Iliad, this epic portrays the battle between the ancient kingdoms of Troy and Sparta. While visiting Spartan King Menelaus (Brendan Gleeson), Trojan prince Paris (Orlando Bloom) falls for Menelaus' wife, Helen (Diane Kruger), and takes her back to Troy. Menelaus' brother, King Agamemnon (Brian Cox), having already defeated every army in Greece, uses his brother's fury as a pretext to declare war against Troy, the last kingdom preventing his control over the Aegean Sea."], ["created_at", "2020-10-16 16:38:56.440811"], ["updated_at", "2020-10-16 16:38:56.440811"]]
+  [1m[35m (8.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Mad Max: Fury Road"], ["year", 2015], ["director", "George Miller"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn1OTYGz2GDC1XjA9tirh_1Rd571yE5UFIYsmZp4nACMd7CCHM"], ["description", "Years after the collapse of civilization, the tyrannical Immortan Joe enslaves apocalypse survivors inside the desert fortress the Citadel. When the warrior Imperator Furiosa (Charlize Theron) leads the despot's five wives in a daring escape, she forges an alliance with Max Rockatansky (Tom Hardy), a loner and former captive. Fortified in the massive, armored truck the War Rig, they try to outrun the ruthless warlord and his henchmen in a deadly high-speed chase through the Wasteland."], ["created_at", "2020-10-16 16:38:56.458074"], ["updated_at", "2020-10-16 16:38:56.458074"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Kingsman: The Secret Service"], ["year", 2014], ["director", "Matthew Vaughn"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaV_8e8HbPXUxNbEO7VxuJMF6g8K9KpZYUFbNkAllh8NMAcbL0"], ["description", "Gary Eggsy Unwin (Taron Egerton), whose late father secretly worked for a spy organization, lives in a South London housing estate and seems headed for a life behind bars. However, dapper agent Harry Hart (Colin Firth) recognizes potential in the youth and recruits him to be a trainee in the secret service. Meanwhile, villainous Richmond Valentine (Samuel L. Jackson) launches a diabolical plan to solve the problem of climate change via a worldwide killing spree."], ["created_at", "2020-10-16 16:38:56.467556"], ["updated_at", "2020-10-16 16:38:56.467556"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "John Wick"], ["year", 2014], ["director", "Chad Stahelski"], ["image", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8VG9sviAteOyJC-CULm4U-WFIiGn8QrDSXDBiF7E-amB99kFX"], ["description", "An ex-hit-man comes out of retirement to track down the gangsters that killed his dog and took everything from him."], ["created_at", "2020-10-16 16:38:56.475249"], ["updated_at", "2020-10-16 16:38:56.475249"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.7ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Avengers"], ["year", 2012], ["director", "Joss Whedon"], ["image", "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"], ["description", "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."], ["created_at", "2020-10-16 16:38:56.489437"], ["updated_at", "2020-10-16 16:38:56.489437"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Doctor Strange"], ["year", 2016], ["director", "Scott Derrickson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSY36FiQD0jYGpEeLmi4rJrUjX2OwXVqB6Nktco3M_KvdIQpARF"], ["description", "Dr. Stephen Strange's (Benedict Cumberbatch) life changes after a car accident robs him of the use of his hands. When traditional medicine fails him, he looks for healing, and hope, in a mysterious enclave. He quickly learns that the enclave is at the front line of a battle against unseen dark forces bent on destroying reality. Before long, Strange is forced to choose between his life of fortune and status or leave it all behind to defend the world as the most powerful sorcerer in existence."], ["created_at", "2020-10-16 16:38:56.498178"], ["updated_at", "2020-10-16 16:38:56.498178"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Black Panther"], ["year", 2016], ["director", "Ryan Coogler"], ["image", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRKSycOdlnIhxqT7O_n7nbBFpDV__d1IGzEB6QGG-O7zOVj57y1"], ["description", "After the death of his father, T'Challa returns home to the African nation of Wakanda to take his rightful place as king. When a powerful enemy suddenly reappears, T'Challa's mettle as king -- and as Black Panther -- gets tested when he's drawn into a conflict that puts the fate of Wakanda and the entire world at risk. Faced with treachery and danger, the young king must rally his allies and release the full power of Black Panther to defeat his foes and secure the safety of his people."], ["created_at", "2020-10-16 16:38:56.509089"], ["updated_at", "2020-10-16 16:38:56.509089"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Veritatis atque vitae. Unde voluptas nihil. Maxime qui enim.\"]"], ["rating", 3], ["movie_id", 18], ["club_id", 6], ["created_at", "2020-10-16 16:38:56.532061"], ["updated_at", "2020-10-16 16:38:56.532061"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.9ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Placeat doloribus est. Officia sed sint. Et est ducimus.\"]"], ["rating", 2], ["movie_id", 16], ["club_id", 6], ["created_at", "2020-10-16 16:38:56.544688"], ["updated_at", "2020-10-16 16:38:56.544688"]]
+  [1m[35m (3.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.8ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Earum ab unde. Est veritatis delectus. Error excepturi magnam.\"]"], ["rating", 10], ["movie_id", 17], ["club_id", 6], ["created_at", "2020-10-16 16:38:56.559981"], ["updated_at", "2020-10-16 16:38:56.559981"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.1ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Necessitatibus similique consequatur. Odit optio reprehenderit. Quas ducimus illum.\"]"], ["rating", 3], ["movie_id", 20], ["club_id", 7], ["created_at", "2020-10-16 16:38:56.571136"], ["updated_at", "2020-10-16 16:38:56.571136"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (2.3ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Dolor eos deserunt. Quidem modi dolore. Aut harum facilis.\"]"], ["rating", 6], ["movie_id", 19], ["club_id", 7], ["created_at", "2020-10-16 16:38:56.579359"], ["updated_at", "2020-10-16 16:38:56.579359"]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.3ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Nihil aut non. Quis incidunt quaerat. Ut sint error.\"]"], ["rating", 2], ["movie_id", 21], ["club_id", 7], ["created_at", "2020-10-16 16:38:56.597311"], ["updated_at", "2020-10-16 16:38:56.597311"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Repellendus et ipsam. Nobis sed illo. Sed nemo quisquam.\"]"], ["rating", 5], ["movie_id", 22], ["club_id", 8], ["created_at", "2020-10-16 16:38:56.655322"], ["updated_at", "2020-10-16 16:38:56.655322"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Id architecto animi. Doloremque quod labore. Commodi quis sit.\"]"], ["rating", 5], ["movie_id", 23], ["club_id", 8], ["created_at", "2020-10-16 16:38:56.664694"], ["updated_at", "2020-10-16 16:38:56.664694"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Veniam iusto id. Sunt odio adipisci. Ex est quod.\"]"], ["rating", 7], ["movie_id", 24], ["club_id", 8], ["created_at", "2020-10-16 16:38:56.674022"], ["updated_at", "2020-10-16 16:38:56.674022"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.8ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Sint ipsam qui. Dolores totam aut. Quisquam et minima.\"]"], ["rating", 8], ["movie_id", 25], ["club_id", 9], ["created_at", "2020-10-16 16:38:56.689836"], ["updated_at", "2020-10-16 16:38:56.689836"]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.1ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Odit sed consequatur. Et est quasi. Assumenda maiores ad.\"]"], ["rating", 4], ["movie_id", 26], ["club_id", 9], ["created_at", "2020-10-16 16:38:56.700251"], ["updated_at", "2020-10-16 16:38:56.700251"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Aliquam voluptatem sit. Eveniet fugit qui. Ex voluptas eveniet.\"]"], ["rating", 1], ["movie_id", 27], ["club_id", 9], ["created_at", "2020-10-16 16:38:56.710782"], ["updated_at", "2020-10-16 16:38:56.710782"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.9ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Quo voluptatem explicabo. Eum ab ut. Quo pariatur eos.\"]"], ["rating", 8], ["movie_id", 28], ["club_id", 10], ["created_at", "2020-10-16 16:38:56.718073"], ["updated_at", "2020-10-16 16:38:56.718073"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Consectetur rem aperiam. Aperiam et autem. Porro non quia.\"]"], ["rating", 6], ["movie_id", 29], ["club_id", 10], ["created_at", "2020-10-16 16:38:56.738221"], ["updated_at", "2020-10-16 16:38:56.738221"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Voluptatem ea est. Voluptatum dolorum in. Maiores enim et.\"]"], ["rating", 7], ["movie_id", 30], ["club_id", 10], ["created_at", "2020-10-16 16:38:56.746563"], ["updated_at", "2020-10-16 16:38:56.746563"]]
+  [1m[35m (3.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.9ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"repudiandae\", \"accusamus\", \"aspernatur\"]"], ["club_id", 6], ["user_id", 11], ["created_at", "2020-10-16 16:38:56.796692"], ["updated_at", "2020-10-16 16:38:56.796692"]]
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (3.5ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (15.3ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"est\", \"voluptate\", \"et\"]"], ["club_id", 6], ["user_id", 13], ["created_at", "2020-10-16 16:38:56.830072"], ["updated_at", "2020-10-16 16:38:56.830072"]]
+  [1m[35m (29.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (16.6ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"quo\", \"ut\", \"quisquam\"]"], ["club_id", 7], ["user_id", 14], ["created_at", "2020-10-16 16:38:56.981130"], ["updated_at", "2020-10-16 16:38:56.981130"]]
+  [1m[35m (2.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (2.1ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"dolorem\", \"vel\", \"qui\"]"], ["club_id", 7], ["user_id", 15], ["created_at", "2020-10-16 16:38:57.062179"], ["updated_at", "2020-10-16 16:38:57.062179"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (0.6ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"quo\", \"delectus\", \"nihil\"]"], ["club_id", 8], ["user_id", 16], ["created_at", "2020-10-16 16:38:57.110651"], ["updated_at", "2020-10-16 16:38:57.110651"]]
+  [1m[35m (4.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (0.9ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"ea\", \"eaque\", \"ut\"]"], ["club_id", 8], ["user_id", 17], ["created_at", "2020-10-16 16:38:57.159238"], ["updated_at", "2020-10-16 16:38:57.159238"]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (0.5ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"quia\", \"nostrum\", \"eum\"]"], ["club_id", 9], ["user_id", 18], ["created_at", "2020-10-16 16:38:57.244698"], ["updated_at", "2020-10-16 16:38:57.244698"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.2ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"et\", \"commodi\", \"quidem\"]"], ["club_id", 9], ["user_id", 19], ["created_at", "2020-10-16 16:38:57.265819"], ["updated_at", "2020-10-16 16:38:57.265819"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.2ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"ut\", \"ipsa\", \"et\"]"], ["club_id", 10], ["user_id", 20], ["created_at", "2020-10-16 16:38:57.298001"], ["updated_at", "2020-10-16 16:38:57.298001"]]
+  [1m[35m (4.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.3ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"assumenda\", \"cupiditate\", \"suscipit\"]"], ["club_id", 10], ["user_id", 12], ["created_at", "2020-10-16 16:38:57.337920"], ["updated_at", "2020-10-16 16:38:57.337920"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (1.6ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (1.0ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 11]]
+  [1m[36mMember Destroy (1.0ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 17]]
+  [1m[36mMember Destroy (0.1ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 18]]
+  [1m[36mMessage Load (0.8ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 11]]
+  [1m[36mMessage Destroy (0.8ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 1]]
+  [1m[36mUser Destroy (0.2ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 11]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 12]]
+  [1m[36mMember Destroy (0.7ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 19]]
+  [1m[36mMember Destroy (0.1ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 20]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 12]]
+  [1m[36mMessage Destroy (0.2ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 10]]
+  [1m[36mUser Destroy (0.1ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 12]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 13]]
+  [1m[36mMember Destroy (0.5ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 21]]
+  [1m[36mMember Destroy (0.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 22]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 13]]
+  [1m[36mMessage Destroy (0.3ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 2]]
+  [1m[36mUser Destroy (0.2ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 13]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 14]]
+  [1m[36mMember Destroy (0.3ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 23]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 14]]
+  [1m[36mMessage Destroy (0.4ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 3]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 14]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 15]]
+  [1m[36mMember Destroy (0.4ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 24]]
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 15]]
+  [1m[36mMessage Destroy (0.5ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 4]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 15]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 16]]
+  [1m[36mMember Destroy (1.4ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 25]]
+  [1m[36mMessage Load (0.3ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 16]]
+  [1m[36mMessage Destroy (0.4ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 5]]
+  [1m[36mUser Destroy (0.5ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 16]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 17]]
+  [1m[36mMember Destroy (5.8ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 26]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 17]]
+  [1m[36mMessage Destroy (0.5ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 6]]
+  [1m[36mUser Destroy (0.2ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 17]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.3ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 18]]
+  [1m[36mMember Destroy (0.5ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 27]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 18]]
+  [1m[36mMessage Destroy (1.6ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 7]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 18]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 19]]
+  [1m[36mMember Destroy (1.6ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 28]]
+  [1m[36mMember Destroy (0.1ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 29]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 19]]
+  [1m[36mMessage Destroy (0.3ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 8]]
+  [1m[36mUser Destroy (0.3ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 19]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."user_id" = ?[0m  [["user_id", 20]]
+  [1m[36mMember Destroy (0.8ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 30]]
+  [1m[36mMember Destroy (0.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 31]]
+  [1m[36mMember Destroy (0.2ms)[0m  [1m[31mDELETE FROM "members" WHERE "members"."id" = ?[0m  [["id", 32]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."user_id" = ?[0m  [["user_id", 20]]
+  [1m[36mMessage Destroy (0.3ms)[0m  [1m[31mDELETE FROM "messages" WHERE "messages"."id" = ?[0m  [["id", 9]]
+  [1m[36mUser Destroy (0.2ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = ?[0m  [["id", 20]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mClub Load (0.6ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (1.0ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 6]]
+  [1m[36mReview Destroy (0.9ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 16]]
+  [1m[36mReview Destroy (0.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 17]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 18]]
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 6]]
+  [1m[36mMember Load (0.4ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 6]]
+  [1m[36mClub Destroy (0.3ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 6]]
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 7]]
+  [1m[36mReview Destroy (0.7ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 19]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 20]]
+  [1m[36mReview Destroy (0.2ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 21]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 7]]
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 7]]
+  [1m[36mClub Destroy (0.2ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 7]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.4ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 8]]
+  [1m[36mReview Destroy (0.5ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 22]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 23]]
+  [1m[36mReview Destroy (0.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 24]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 8]]
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 8]]
+  [1m[36mClub Destroy (0.2ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 8]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 9]]
+  [1m[36mReview Destroy (0.5ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 25]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 26]]
+  [1m[36mReview Destroy (0.3ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 27]]
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 9]]
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 9]]
+  [1m[36mClub Destroy (0.4ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 9]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."club_id" = ?[0m  [["club_id", 10]]
+  [1m[36mReview Destroy (0.4ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 28]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 29]]
+  [1m[36mReview Destroy (0.1ms)[0m  [1m[31mDELETE FROM "reviews" WHERE "reviews"."id" = ?[0m  [["id", 30]]
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."club_id" = ?[0m  [["club_id", 10]]
+  [1m[36mMember Load (0.1ms)[0m  [1m[34mSELECT "members".* FROM "members" WHERE "members"."club_id" = ?[0m  [["club_id", 10]]
+  [1m[36mClub Destroy (0.2ms)[0m  [1m[31mDELETE FROM "clubs" WHERE "clubs"."id" = ?[0m  [["id", 10]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mMember Load (0.2ms)[0m  [1m[34mSELECT "members".* FROM "members"[0m
+  [1m[36mMovie Load (2.6ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 16]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 16]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 17]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 17]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 18]]
+  [1m[36mMovie Destroy (1.0ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 18]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 19]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 19]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 20]]
+  [1m[36mMovie Destroy (0.3ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 20]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 21]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 21]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 22]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 22]]
+  [1m[35m (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 23]]
+  [1m[36mMovie Destroy (0.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 23]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 24]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 24]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 25]]
+  [1m[36mMovie Destroy (0.5ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 25]]
+  [1m[35m (4.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 26]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 26]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 27]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 27]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.1ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 28]]
+  [1m[36mMovie Destroy (0.5ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 28]]
+  [1m[35m (2.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (0.2ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 29]]
+  [1m[36mMovie Destroy (1.4ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 29]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Load (1.0ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = ?[0m  [["movie_id", 30]]
+  [1m[36mMovie Destroy (0.6ms)[0m  [1m[31mDELETE FROM "movies" WHERE "movies"."id" = ?[0m  [["id", 30]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mReview Load (0.5ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews"[0m
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (1.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Kristine Senger"], ["age", 22], ["email", "dell.gusikowski@lesch.io"], ["profile_image", "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"], ["created_at", "2020-10-16 16:40:18.390530"], ["updated_at", "2020-10-16 16:40:18.390530"]]
+  [1m[35m (2.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Roberto Ferry"], ["age", 66], ["email", "ivan@mckenzie-denesik.io"], ["profile_image", "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg"], ["created_at", "2020-10-16 16:40:18.401159"], ["updated_at", "2020-10-16 16:40:18.401159"]]
+  [1m[35m (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "The Hon. Bertram Graham"], ["age", 88], ["email", "adam@sauer.com"], ["profile_image", "https://perfectczechwomen.com/wp-content/uploads/2019/04/New-Profile-20-500x536.jpg"], ["created_at", "2020-10-16 16:40:18.411015"], ["updated_at", "2020-10-16 16:40:18.411015"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Esteban Dach"], ["age", 91], ["email", "humberto.dare@mraz-ritchie.io"], ["profile_image", "https://i.insider.com/59b6b9b6f7f1f622008b47e9?width=600&format=jpeg&auto=webp"], ["created_at", "2020-10-16 16:40:18.418739"], ["updated_at", "2020-10-16 16:40:18.418739"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Sharika Conn"], ["age", 68], ["email", "maragret.powlowski@schimmel.io"], ["profile_image", "https://lh3.googleusercontent.com/proxy/7Lk6xvrPTfVFM8Kb9rysxtrKgFuRW_7sR8MCdVobiQjhTA61rtK5GRT8jAxCKtRp1vjBJSRE62feLrnJWwRYuy4Bu4vD5gCCBbhAshrTMNhDVD-3_IONP3LXbmBv_cMoHCteG4s"], ["created_at", "2020-10-16 16:40:18.429689"], ["updated_at", "2020-10-16 16:40:18.429689"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.6ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Dustin Mayer"], ["age", 94], ["email", "karin_breitenberg@cronin.org"], ["profile_image", "https://www4.pictures.zimbio.com/gi/39th+Annual+People+Choice+Awards+Portraits+lza8vaU_QsZx.jpg"], ["created_at", "2020-10-16 16:40:18.438572"], ["updated_at", "2020-10-16 16:40:18.438572"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Amb. Horacio Wiza"], ["age", 63], ["email", "marcellus@heller-auer.net"], ["profile_image", "https://img-cdn.tid.al/o/6dc39fec4427c4f9f759c1f2c44137bec7366e4c.png"], ["created_at", "2020-10-16 16:40:18.447520"], ["updated_at", "2020-10-16 16:40:18.447520"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.7ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Amb. Jesusita McKenzie"], ["age", 87], ["email", "cassie.kertzmann@deckow.info"], ["profile_image", "https://lh3.googleusercontent.com/proxy/pAeLbKbOFAutI1n4wWr6yOhTZY_TPl3S6N3QaGfiDFRaP9GIDvWcNdFa_HlDkvh4DKZd7RWWz8oaWnrG-suZzlYL8bGKG5PWUnpLJIapJfZ8v8GslbBxzohfI9bryvu5M-w"], ["created_at", "2020-10-16 16:40:18.455148"], ["updated_at", "2020-10-16 16:40:18.455148"]]
+  [1m[35m (1.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Rosaline Carter"], ["age", 61], ["email", "loyd.lang@cassin.co"], ["profile_image", "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png"], ["created_at", "2020-10-16 16:40:18.463671"], ["updated_at", "2020-10-16 16:40:18.463671"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (0.4ms)[0m  [1m[32mINSERT INTO "users" ("name", "age", "email", "profile_image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Catrice Runolfsdottir"], ["age", 26], ["email", "louann.langosh@towne.info"], ["profile_image", "https://www.bigredcloud.com/wp-content/uploads/4-tips-for-taking-professional-profile-pictures.jpg"], ["created_at", "2020-10-16 16:40:18.472960"], ["updated_at", "2020-10-16 16:40:18.472960"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.6ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Horror Club"], ["meeting_time", "October 22, 2020"], ["description", "[\"Numquam voluptas et. Ut laudantium quibusdam. Adipisci repudiandae ea.\"]"], ["image", "https://images.squarespace-cdn.com/content/5aa2aa305417fc8e6adca1a1/1528215995115-G4FGVUU3EFBJ62JVV6IK/IMG_3023+%282%29.jpg?format=1500w&content-type=image%2Fjpeg"], ["created_at", "2020-10-16 16:40:18.480866"], ["updated_at", "2020-10-16 16:40:18.480866"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.6ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Christopher Nolan Club"], ["meeting_time", "December 25, 2020"], ["description", "[\"Enim eum quam. Qui vel veniam. Mollitia dolores dolore.\"]"], ["image", "https://upload.wikimedia.org/wikipedia/commons/9/95/Christopher_Nolan_Cannes_2018.jpg"], ["created_at", "2020-10-16 16:40:18.489161"], ["updated_at", "2020-10-16 16:40:18.489161"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.6ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Brad Pitt Club"], ["meeting_time", "October 31, 2020"], ["description", "[\"Eos id nam. Labore nesciunt veniam. Adipisci animi eum.\"]"], ["image", "https://www.biography.com/.image/c_fit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_620/MTY3MDUxMjI0MjM4MDA3OTgx/brad-pitt-attends-the-premiere-of-20th-century-foxs.jpg"], ["created_at", "2020-10-16 16:40:18.497308"], ["updated_at", "2020-10-16 16:40:18.497308"]]
+  [1m[35m (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.8ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Action Club"], ["meeting_time", "November 1, 2020"], ["description", "[\"Dignissimos vel consectetur. Exercitationem aliquid non. Ut non et.\"]"], ["image", "https://cdn10.bigcommerce.com/s-pn1ttq/products/1793/images/3451/Utlimate_Action_Movie_Club_sm__89445.1512077306.380.380.jpg?c=2"], ["created_at", "2020-10-16 16:40:18.540397"], ["updated_at", "2020-10-16 16:40:18.540397"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mClub Create (0.5ms)[0m  [1m[32mINSERT INTO "clubs" ("name", "meeting_time", "description", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "Marvel Movies Club "], ["meeting_time", "December 11, 2020"], ["description", "[\"Commodi assumenda et. Id non ut. Incidunt in iusto.\"]"], ["image", "https://www.slashfilm.com/wp/wp-content/images/marvel-intro-e1556625768997.jpg"], ["created_at", "2020-10-16 16:40:18.552945"], ["updated_at", "2020-10-16 16:40:18.552945"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 11], ["user_id", 21], ["created_at", "2020-10-16 16:40:18.561995"], ["updated_at", "2020-10-16 16:40:18.561995"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.1ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 12], ["user_id", 21], ["created_at", "2020-10-16 16:40:18.575767"], ["updated_at", "2020-10-16 16:40:18.575767"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 13], ["user_id", 22], ["created_at", "2020-10-16 16:40:18.587006"], ["updated_at", "2020-10-16 16:40:18.587006"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 14], ["user_id", 22], ["created_at", "2020-10-16 16:40:18.593450"], ["updated_at", "2020-10-16 16:40:18.593450"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (4.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 15], ["user_id", 23], ["created_at", "2020-10-16 16:40:18.600922"], ["updated_at", "2020-10-16 16:40:18.600922"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 11], ["user_id", 23], ["created_at", "2020-10-16 16:40:18.613694"], ["updated_at", "2020-10-16 16:40:18.613694"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.9ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 15], ["user_id", 24], ["created_at", "2020-10-16 16:40:18.623673"], ["updated_at", "2020-10-16 16:40:18.623673"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 14], ["user_id", 25], ["created_at", "2020-10-16 16:40:18.634477"], ["updated_at", "2020-10-16 16:40:18.634477"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.2ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 14], ["user_id", 26], ["created_at", "2020-10-16 16:40:18.644595"], ["updated_at", "2020-10-16 16:40:18.644595"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.8ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 11], ["user_id", 27], ["created_at", "2020-10-16 16:40:18.656200"], ["updated_at", "2020-10-16 16:40:18.656200"]]
+  [1m[35m (5.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (1.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 12], ["user_id", 28], ["created_at", "2020-10-16 16:40:18.673418"], ["updated_at", "2020-10-16 16:40:18.673418"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 15], ["user_id", 29], ["created_at", "2020-10-16 16:40:18.682932"], ["updated_at", "2020-10-16 16:40:18.682932"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.7ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 11], ["user_id", 29], ["created_at", "2020-10-16 16:40:18.690030"], ["updated_at", "2020-10-16 16:40:18.690030"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 12], ["user_id", 30], ["created_at", "2020-10-16 16:40:18.705671"], ["updated_at", "2020-10-16 16:40:18.705671"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.6ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 13], ["user_id", 30], ["created_at", "2020-10-16 16:40:18.716707"], ["updated_at", "2020-10-16 16:40:18.716707"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMember Create (0.5ms)[0m  [1m[32mINSERT INTO "members" ("club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["club_id", 12], ["user_id", 30], ["created_at", "2020-10-16 16:40:18.729068"], ["updated_at", "2020-10-16 16:40:18.729068"]]
+  [1m[35m (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Midsommar"], ["year", 2019], ["director", "Ari Aster"], ["image", "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/Midsommar_%282019_film_poster%29.png/220px-Midsommar_%282019_film_poster%29.png"], ["description", "A couple travel to Sweden to visit their friend's rural hometown for its fabled midsummer festival, but what begins as an idyllic retreat quickly devolves into an increasingly violent and bizarre competition at the hands of a pagan cult."], ["created_at", "2020-10-16 16:40:18.737629"], ["updated_at", "2020-10-16 16:40:18.737629"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "It"], ["year", 2017], ["director", "Andrés Muschietti"], ["image", "https://i.pinimg.com/originals/4e/8e/b7/4e8eb7ff2b0062083df9828a726dafe6.jpg"], ["description", "Seven young outcasts in Derry, Maine, are about to face their worst nightmare -- an ancient, shape-shifting evil that emerges from the sewer every 27 years to prey on the town's children. Banding together over the course of one horrifying summer, the friends must overcome their own personal fears to battle the murderous, bloodthirsty clown known as Pennywise."], ["created_at", "2020-10-16 16:40:18.746480"], ["updated_at", "2020-10-16 16:40:18.746480"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Us"], ["year", 2019], ["director", "Jordan Peele"], ["image", "https://m.media-amazon.com/images/M/MV5BODUyODM0NjYyNF5BMl5BanBnXkFtZTgwNjAwMDU5NjM@._V1_SY1000_SX640_AL_.jpg"], ["description", "Accompanied by her husband, son and daughter, Adelaide Wilson returns to the beachfront home where she grew up as a child. Haunted by a traumatic experience from the past, Adelaide grows increasingly concerned that something bad is going to happen. Her worst fears soon become a reality when four masked strangers descend upon the house, forcing the Wilsons into a fight for survival. When the masks come off, the family is horrified to learn that each attacker takes the appearance of one of them."], ["created_at", "2020-10-16 16:40:18.753044"], ["updated_at", "2020-10-16 16:40:18.753044"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.4ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Inception"], ["year", 2010], ["director", "Christopher Nolan"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg"], ["description", "Dom Cobb (Leonardo DiCaprio) is a thief with the rare ability to enter people's dreams and steal their secrets from their subconscious. His skill has made him a hot commodity in the world of corporate espionage but has also cost him everything he loves. Cobb gets a chance at redemption when he is offered a seemingly impossible task: Plant an idea in someone's mind. If he succeeds, it will be the perfect crime, but a dangerous enemy anticipates Cobb's every move."], ["created_at", "2020-10-16 16:40:18.760582"], ["updated_at", "2020-10-16 16:40:18.760582"]]
+  [1m[35m (10.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.7ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Dark Knight"], ["year", 2008], ["director", "Christopher Nolan"], ["image", "https://akm-img-a-in.tosshub.com/sites/dailyo/story/embed/201807/tdk_071818043506.jpg"], ["description", "With the help of allies Lt. Jim Gordon (Gary Oldman) and DA Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been able to keep a tight lid on crime in Gotham City. But when a vile young criminal calling himself the Joker (Heath Ledger) suddenly throws the town into chaos, the caped Crusader begins to tread a fine line between heroism and vigilantism."], ["created_at", "2020-10-16 16:40:18.778046"], ["updated_at", "2020-10-16 16:40:18.778046"]]
+  [1m[35m (2.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Interstellar"], ["year", 2014], ["director", "Christopher Nolan"], ["image", "https://images-na.ssl-images-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg"], ["description", "In Earth's future, a global crop blight and second Dust Bowl are slowly rendering the planet uninhabitable. Professor Brand (Michael Caine), a brilliant NASA physicist, is working on plans to save mankind by transporting Earth's population to a new home via a wormhole. But first, Brand must send former NASA pilot Cooper (Matthew McConaughey) and a team of researchers through the wormhole and across the galaxy to find out which of three planets could be mankind's new home."], ["created_at", "2020-10-16 16:40:18.788074"], ["updated_at", "2020-10-16 16:40:18.788074"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.7ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Fight Club"], ["year", 1999], ["director", "David Fincher"], ["image", "https://akns-images.eonline.com/eol_images/Entire_Site/2019914/rs_685x1024-191014113838-634-fight-club-poster.cl.101419.jpg?fit=around|685:auto&output-quality=90&crop=685:auto;center,top"], ["description", "A depressed man (Edward Norton) suffering from insomnia meets a strange soap salesman named Tyler Durden (Brad Pitt) and soon finds himself living in his squalid house after his perfect apartment is destroyed. The two bored men form an underground club with strict rules and fight other men who are fed up with their mundane lives. Their perfect partnership frays when Marla (Helena Bonham Carter), a fellow support group crasher, attracts Tyler's attention."], ["created_at", "2020-10-16 16:40:18.795242"], ["updated_at", "2020-10-16 16:40:18.795242"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.4ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Money Ball"], ["year", 2011], ["director", "Bennett Miller"], ["image", "https://m.media-amazon.com/images/M/MV5BMjAxOTU3Mzc1M15BMl5BanBnXkFtZTcwMzk1ODUzNg@@._V1_.jpg"], ["description", "Billy Beane (Brad Pitt), general manager of the Oakland A's, one day has an epiphany: Baseball's conventional wisdom is all wrong. Faced with a tight budget, Beane must reinvent his team by outsmarting the richer ball clubs. Joining forces with Ivy League graduate Peter Brand (Jonah Hill), Beane prepares to challenge old-school traditions. He recruits bargain-bin players whom the scouts have labeled as flawed, but have game-winning potential. Based on the book by Michael Lewis."], ["created_at", "2020-10-16 16:40:18.807506"], ["updated_at", "2020-10-16 16:40:18.807506"]]
+  [1m[35m (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.2ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Troy"], ["year", 2004], ["director", "Wolfgang Peterson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQf9CM5qT6EXTQY5YF87IKI_GBu0FVCe3IucLJvJJmGhsu7Ux33"], ["description", "Based on Homer's Iliad, this epic portrays the battle between the ancient kingdoms of Troy and Sparta. While visiting Spartan King Menelaus (Brendan Gleeson), Trojan prince Paris (Orlando Bloom) falls for Menelaus' wife, Helen (Diane Kruger), and takes her back to Troy. Menelaus' brother, King Agamemnon (Brian Cox), having already defeated every army in Greece, uses his brother's fury as a pretext to declare war against Troy, the last kingdom preventing his control over the Aegean Sea."], ["created_at", "2020-10-16 16:40:18.821664"], ["updated_at", "2020-10-16 16:40:18.821664"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.4ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.6ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Mad Max: Fury Road"], ["year", 2015], ["director", "George Miller"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn1OTYGz2GDC1XjA9tirh_1Rd571yE5UFIYsmZp4nACMd7CCHM"], ["description", "Years after the collapse of civilization, the tyrannical Immortan Joe enslaves apocalypse survivors inside the desert fortress the Citadel. When the warrior Imperator Furiosa (Charlize Theron) leads the despot's five wives in a daring escape, she forges an alliance with Max Rockatansky (Tom Hardy), a loner and former captive. Fortified in the massive, armored truck the War Rig, they try to outrun the ruthless warlord and his henchmen in a deadly high-speed chase through the Wasteland."], ["created_at", "2020-10-16 16:40:18.830202"], ["updated_at", "2020-10-16 16:40:18.830202"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.8ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Kingsman: The Secret Service"], ["year", 2014], ["director", "Matthew Vaughn"], ["image", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaV_8e8HbPXUxNbEO7VxuJMF6g8K9KpZYUFbNkAllh8NMAcbL0"], ["description", "Gary Eggsy Unwin (Taron Egerton), whose late father secretly worked for a spy organization, lives in a South London housing estate and seems headed for a life behind bars. However, dapper agent Harry Hart (Colin Firth) recognizes potential in the youth and recruits him to be a trainee in the secret service. Meanwhile, villainous Richmond Valentine (Samuel L. Jackson) launches a diabolical plan to solve the problem of climate change via a worldwide killing spree."], ["created_at", "2020-10-16 16:40:18.842515"], ["updated_at", "2020-10-16 16:40:18.842515"]]
+  [1m[35m (5.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.5ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "John Wick"], ["year", 2014], ["director", "Chad Stahelski"], ["image", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8VG9sviAteOyJC-CULm4U-WFIiGn8QrDSXDBiF7E-amB99kFX"], ["description", "An ex-hit-man comes out of retirement to track down the gangsters that killed his dog and took everything from him."], ["created_at", "2020-10-16 16:40:18.859274"], ["updated_at", "2020-10-16 16:40:18.859274"]]
+  [1m[35m (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (4.7ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "The Avengers"], ["year", 2012], ["director", "Joss Whedon"], ["image", "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"], ["description", "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."], ["created_at", "2020-10-16 16:40:18.873806"], ["updated_at", "2020-10-16 16:40:18.873806"]]
+  [1m[35m (4.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (0.7ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Doctor Strange"], ["year", 2016], ["director", "Scott Derrickson"], ["image", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSY36FiQD0jYGpEeLmi4rJrUjX2OwXVqB6Nktco3M_KvdIQpARF"], ["description", "Dr. Stephen Strange's (Benedict Cumberbatch) life changes after a car accident robs him of the use of his hands. When traditional medicine fails him, he looks for healing, and hope, in a mysterious enclave. He quickly learns that the enclave is at the front line of a battle against unseen dark forces bent on destroying reality. Before long, Strange is forced to choose between his life of fortune and status or leave it all behind to defend the world as the most powerful sorcerer in existence."], ["created_at", "2020-10-16 16:40:18.893642"], ["updated_at", "2020-10-16 16:40:18.893642"]]
+  [1m[35m (6.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMovie Create (1.0ms)[0m  [1m[32mINSERT INTO "movies" ("title", "year", "director", "image", "description", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["title", "Black Panther"], ["year", 2016], ["director", "Ryan Coogler"], ["image", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRKSycOdlnIhxqT7O_n7nbBFpDV__d1IGzEB6QGG-O7zOVj57y1"], ["description", "After the death of his father, T'Challa returns home to the African nation of Wakanda to take his rightful place as king. When a powerful enemy suddenly reappears, T'Challa's mettle as king -- and as Black Panther -- gets tested when he's drawn into a conflict that puts the fate of Wakanda and the entire world at risk. Faced with treachery and danger, the young king must rally his allies and release the full power of Black Panther to defeat his foes and secure the safety of his people."], ["created_at", "2020-10-16 16:40:18.910889"], ["updated_at", "2020-10-16 16:40:18.910889"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.1ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Eos provident nihil. Et alias quasi. Voluptatem dolorem eligendi.\"]"], ["rating", 6], ["movie_id", 33], ["club_id", 11], ["created_at", "2020-10-16 16:40:18.921372"], ["updated_at", "2020-10-16 16:40:18.921372"]]
+  [1m[35m (1.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Quod sunt corporis. Corrupti eligendi consequatur. Exercitationem possimus voluptas.\"]"], ["rating", 5], ["movie_id", 31], ["club_id", 11], ["created_at", "2020-10-16 16:40:18.932709"], ["updated_at", "2020-10-16 16:40:18.932709"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Nihil labore quia. Ea qui voluptates. Temporibus laboriosam nam.\"]"], ["rating", 9], ["movie_id", 32], ["club_id", 11], ["created_at", "2020-10-16 16:40:18.943145"], ["updated_at", "2020-10-16 16:40:18.943145"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Dolor nobis cumque. Sit iusto officia. Dolorum voluptas rerum.\"]"], ["rating", 2], ["movie_id", 35], ["club_id", 12], ["created_at", "2020-10-16 16:40:18.952894"], ["updated_at", "2020-10-16 16:40:18.952894"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Facilis vero ea. Enim officiis sit. Molestiae qui aut.\"]"], ["rating", 10], ["movie_id", 34], ["club_id", 12], ["created_at", "2020-10-16 16:40:18.961981"], ["updated_at", "2020-10-16 16:40:18.961981"]]
+  [1m[35m (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Rerum maiores vitae. Et consequatur et. Numquam eligendi facilis.\"]"], ["rating", 4], ["movie_id", 36], ["club_id", 12], ["created_at", "2020-10-16 16:40:18.974702"], ["updated_at", "2020-10-16 16:40:18.974702"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Qui libero repudiandae. Iste et aut. Qui libero cum.\"]"], ["rating", 7], ["movie_id", 37], ["club_id", 13], ["created_at", "2020-10-16 16:40:18.984691"], ["updated_at", "2020-10-16 16:40:18.984691"]]
+  [1m[35m (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.7ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Minus sit dolorem. Omnis ut dolores. Voluptatem sint cum.\"]"], ["rating", 2], ["movie_id", 38], ["club_id", 13], ["created_at", "2020-10-16 16:40:18.993722"], ["updated_at", "2020-10-16 16:40:18.993722"]]
+  [1m[35m (2.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.5ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Impedit repudiandae sint. Minima reprehenderit accusantium. Perferendis nulla quisquam.\"]"], ["rating", 10], ["movie_id", 39], ["club_id", 13], ["created_at", "2020-10-16 16:40:19.009069"], ["updated_at", "2020-10-16 16:40:19.009069"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.0ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Odit ut eos. Inventore magnam sequi. Dolores quasi et.\"]"], ["rating", 10], ["movie_id", 40], ["club_id", 14], ["created_at", "2020-10-16 16:40:19.021589"], ["updated_at", "2020-10-16 16:40:19.021589"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.6ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Nulla quasi est. Est delectus tempore. Aut aut dolorum.\"]"], ["rating", 9], ["movie_id", 41], ["club_id", 14], ["created_at", "2020-10-16 16:40:19.032252"], ["updated_at", "2020-10-16 16:40:19.032252"]]
+  [1m[35m (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (0.8ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Voluptas accusamus voluptatem. Praesentium sunt laudantium. Sit reiciendis voluptate.\"]"], ["rating", 4], ["movie_id", 42], ["club_id", 14], ["created_at", "2020-10-16 16:40:19.045128"], ["updated_at", "2020-10-16 16:40:19.045128"]]
+  [1m[35m (1.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.1ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Saepe voluptatibus nihil. Sapiente provident nobis. Voluptatem sit praesentium.\"]"], ["rating", 7], ["movie_id", 43], ["club_id", 15], ["created_at", "2020-10-16 16:40:19.057753"], ["updated_at", "2020-10-16 16:40:19.057753"]]
+  [1m[35m (1.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (1.8ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Dolores est delectus. Et amet libero. Asperiores qui iusto.\"]"], ["rating", 4], ["movie_id", 44], ["club_id", 15], ["created_at", "2020-10-16 16:40:19.129025"], ["updated_at", "2020-10-16 16:40:19.129025"]]
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mReview Create (2.1ms)[0m  [1m[32mINSERT INTO "reviews" ("description", "rating", "movie_id", "club_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["description", "[\"Optio fugit voluptatem. Officia dolores non. Voluptatem qui corporis.\"]"], ["rating", 10], ["movie_id", 45], ["club_id", 15], ["created_at", "2020-10-16 16:40:19.362589"], ["updated_at", "2020-10-16 16:40:19.362589"]]
+  [1m[35m (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (0.9ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"consectetur\", \"mollitia\", \"vero\", \"aut\", \"ab\", \"numquam\", \"libero\", \"eos\", \"eius\", \"omnis\"]"], ["club_id", 11], ["user_id", 21], ["created_at", "2020-10-16 16:40:19.379465"], ["updated_at", "2020-10-16 16:40:19.379465"]]
+  [1m[35m (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.2ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"alias\", \"consequatur\", \"ea\", \"quo\", \"omnis\", \"vero\"]"], ["club_id", 11], ["user_id", 23], ["created_at", "2020-10-16 16:40:19.395829"], ["updated_at", "2020-10-16 16:40:19.395829"]]
+  [1m[35m (1.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"voluptatum\", \"ut\", \"aut\", \"omnis\", \"animi\", \"eius\", \"quis\", \"deserunt\", \"repellendus\"]"], ["club_id", 12], ["user_id", 24], ["created_at", "2020-10-16 16:40:19.419937"], ["updated_at", "2020-10-16 16:40:19.419937"]]
+  [1m[35m (5.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"dicta\", \"nulla\", \"occaecati\", \"id\", \"rerum\", \"nemo\", \"ut\", \"minus\"]"], ["club_id", 12], ["user_id", 25], ["created_at", "2020-10-16 16:40:19.494888"], ["updated_at", "2020-10-16 16:40:19.494888"]]
+  [1m[35m (10.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (8.3ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"dolorem\", \"cumque\", \"delectus\", \"asperiores\", \"nostrum\", \"est\", \"non\", \"assumenda\", \"dignissimos\"]"], ["club_id", 13], ["user_id", 26], ["created_at", "2020-10-16 16:40:19.516910"], ["updated_at", "2020-10-16 16:40:19.516910"]]
+  [1m[35m (2.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"at\", \"officiis\", \"ratione\", \"sit\", \"voluptatem\", \"voluptatem\", \"sit\", \"reprehenderit\", \"dolor\"]"], ["club_id", 13], ["user_id", 27], ["created_at", "2020-10-16 16:40:19.546255"], ["updated_at", "2020-10-16 16:40:19.546255"]]
+  [1m[35m (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (0.9ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"consectetur\", \"neque\", \"cum\", \"laudantium\", \"vel\", \"nam\", \"debitis\", \"inventore\", \"reiciendis\"]"], ["club_id", 14], ["user_id", 28], ["created_at", "2020-10-16 16:40:19.556796"], ["updated_at", "2020-10-16 16:40:19.556796"]]
+  [1m[35m (32.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.1ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"quis\", \"deserunt\", \"et\", \"sunt\", \"quasi\", \"quaerat\", \"nobis\", \"qui\", \"eum\"]"], ["club_id", 14], ["user_id", 29], ["created_at", "2020-10-16 16:40:19.720930"], ["updated_at", "2020-10-16 16:40:19.720930"]]
+  [1m[35m (5.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.2ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"sed\", \"totam\", \"ut\", \"velit\", \"vel\", \"fugiat\"]"], ["club_id", 15], ["user_id", 30], ["created_at", "2020-10-16 16:40:19.749003"], ["updated_at", "2020-10-16 16:40:19.749003"]]
+  [1m[35m (2.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("content", "club_id", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["content", "[\"voluptas\", \"dolores\", \"minima\", \"saepe\", \"vero\", \"ipsa\", \"maxime\", \"occaecati\", \"soluta\"]"], ["club_id", 15], ["user_id", 22], ["created_at", "2020-10-16 16:40:19.769097"], ["updated_at", "2020-10-16 16:40:19.769097"]]
+  [1m[35m (3.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (2.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mMovie Load (0.8ms)[0m  [1m[34mSELECT "movies".* FROM "movies" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mClub Load (0.3ms)[0m  [1m[34mSELECT "clubs".* FROM "clubs" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mReview Load (0.3ms)[0m  [1m[34mSELECT "reviews".* FROM "reviews" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mMessage Load (0.4ms)[0m  [1m[34mSELECT "messages".* FROM "messages" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mMember Load (0.9ms)[0m  [1m[34mSELECT "members".* FROM "members" LIMIT ?[0m  [["LIMIT", 11]]
