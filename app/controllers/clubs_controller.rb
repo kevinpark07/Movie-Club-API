@@ -1,12 +1,12 @@
 class ClubsController < ApplicationController
-    before_action :find_club, only: [:show, :update]
 
     def index
-        clubs = Club.All 
+        clubs = Club.all 
         render json: clubs
     end
 
     def show
+        club = Club.find(params[:id])
         render json: club
     end
 
@@ -25,6 +25,7 @@ class ClubsController < ApplicationController
     end
 
     def update
+        club = Club.find(params[:id])
         club.update!(club_params)
 
         if club.save
@@ -37,10 +38,6 @@ class ClubsController < ApplicationController
 
 
     private
-
-    def find_club
-        club = Club.find(params[:id])
-    end
 
     def club_params
         params.require(:club).permit(:name, :meeting_time, :description, :image)

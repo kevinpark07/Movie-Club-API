@@ -1,12 +1,12 @@
 class MessagesController < ApplicationController
-before_action :find_message, only: [:show]
     
     def index
-        messages = Message.All;
+        messages = Message.all;
         render json: messages
     end
 
     def show
+        message = Message.find(params[:id])
         render json: message
     end
 
@@ -27,9 +27,6 @@ before_action :find_message, only: [:show]
 
     private
 
-    def find_message
-        message = Message.find(params[:id])
-    end
 
     def message_params
         params.require(:message).permit(:content, :user, :club)

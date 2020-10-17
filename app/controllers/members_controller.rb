@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
     
     def index
-        members = Member.All;
+        members = Member.all;
         render json: members
     end
 

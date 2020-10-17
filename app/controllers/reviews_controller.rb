@@ -1,12 +1,12 @@
 class ReviewsController < ApplicationController
-    before_action :find_review, only: [:show, :update]
 
     def index
-        reviews = Review.All;
+        reviews = Review.all;
         render json: reviews
     end
 
     def show
+        review = Review.find(params[:id])
         render json: review
     end
 
@@ -25,6 +25,7 @@ class ReviewsController < ApplicationController
     end
 
     def update
+        review = Review.find(params[:id])
         review.update!(review_params)
 
         if review.save
@@ -36,10 +37,6 @@ class ReviewsController < ApplicationController
     end
 
     private
-
-    def find_review
-        review = Review.find(params[:id])
-    end
 
     def review_params
         params.require(:review).permit(:description, :rating, :movie, :club)
