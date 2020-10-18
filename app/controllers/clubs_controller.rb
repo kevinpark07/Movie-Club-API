@@ -16,8 +16,9 @@ class ClubsController < ApplicationController
 
     def create
         club = Club.create!(club_params)
-
         if club.save
+            movie = Movie.find_by(id: params[:movies][:id])
+            Review.create!(movie: movie, club: club)
             render json: club
         else
             render json: {error: club.errors.full_messages}, status: :not_acceptable
@@ -27,7 +28,6 @@ class ClubsController < ApplicationController
     def update
         club = Club.find(params[:id])
         club.update!(club_params)
-
         if club.save
             render json: club
         else
@@ -36,10 +36,15 @@ class ClubsController < ApplicationController
 
     end
 
+    def destroy
+        club = Club.find(params[:id])
+        club.destroy
+        render json: {}
+    end
 
     private
 
     def club_params
-        params.require(:club).permit(:name, :meeting_time, :description, :image)
+        params.require(:club).permit(:name, :meeting_time, :description, :image, :movies)
     end
 end
