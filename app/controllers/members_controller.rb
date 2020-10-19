@@ -15,7 +15,9 @@ class MembersController < ApplicationController
     end
 
     def create
-        member = Member.create!(member_params)
+        club = Club.find_by(id: params[:club][:id])
+        user = User.find_by(id: params[:user][:id])
+        member = Member.create!(club: club, user: user)
 
         if member.save
             render json: member

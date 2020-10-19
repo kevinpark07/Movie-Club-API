@@ -17,8 +17,7 @@ class MessagesController < ApplicationController
     def create
         club = Club.find_by(id: params[:club][:id])
         user = User.find_by(id: params[:user][:id])
-        message = Message.create!(content: message_params, club: club, user: user)
-
+        message = Message.create!(content: message_params[:content], club: club, user: user)
         if message.save
             render json: message
         else
