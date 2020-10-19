@@ -15,7 +15,10 @@ class ReviewsController < ApplicationController
     end
 
     def create
-        review = Review.create!(review_params)
+  
+        club = Club.find_by(id: params[:club][:id])
+        movie = Movie.find_by(id: params[:movie][:id])
+        review = Review.create!(club: club, movie: movie)
 
         if review.save
             render json: review
