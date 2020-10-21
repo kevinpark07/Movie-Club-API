@@ -26,6 +26,12 @@ class MembersController < ApplicationController
         end
     end
 
+    def destroy
+        member = Member.find(params[:id])
+        member.destroy
+        render json: {}
+    end
+
     private
 
     def member_params
