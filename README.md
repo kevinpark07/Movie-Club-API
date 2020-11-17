@@ -1,25 +1,16 @@
-# README
+# MovieClub
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Summary
+This app will allow users to create movie clubs to schedule club meetings and rate/review movies.
 
-Things you may want to cover:
+### User Stories
+- As a user I can create a movie club
+- As a user I can join other movie clubs
+- As a user I can edit club information
+- As a user I can write a review and rate a movie
+- As a user I can view other reviews and ratings for movies
+- As a user I can delete a movie club
+- As a user I can create a user profile page
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# Movie-Club-API
+### Front-end
+[Click here for front-end repo](https://github.com/kevinpark07/The-Movie-Club-App)
